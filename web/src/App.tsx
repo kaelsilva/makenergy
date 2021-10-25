@@ -1,7 +1,8 @@
 import React from 'react';
+import Chart from './pages/Chart';
 
 const App: React.FC = () => {
-  return <div>Hello</div>;
+  return <Chart />;
 };
 
 export default App;
