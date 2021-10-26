@@ -26,10 +26,6 @@ const Chart: React.FC = () => {
     type: 'potency',
   });
 
-  const handlePlotVariableChange = (event: SelectChangeEvent): void => {
-    setPlotVariable({ type: event.target.value });
-  };
-
   useEffect(() => {
     let dataArray: IPlotData[] = [];
     switch (plotVariable.type) {
@@ -79,6 +75,24 @@ const Chart: React.FC = () => {
 
   const data = plotData as unknown as readonly object[];
 
+  const calculatePrice = (): string => {
+    const priceUnityKWh = 0.95;
+    const time = dadosUsina[1].tempo_h - dadosUsina[0].tempo_h;
+    let pot = 0;
+    dadosUsina.forEach((data) => {
+      pot += data.potencia_kW;
+    });
+
+    const result = (pot * time * priceUnityKWh).toLocaleString('pt-bt', {
+      maximumFractionDigits: 2,
+    });
+
+    return result;
+  };
+  const handlePlotVariableChange = (event: SelectChangeEvent): void => {
+    setPlotVariable({ type: event.target.value });
+  };
+
   const formatter = (num: number): string => {
     return num.toFixed();
   };
@@ -119,6 +133,7 @@ const Chart: React.FC = () => {
         />
         <Line type="monotone" dataKey="uv" stroke="#8884d8" dot={false} />
       </LineChart>
+      <div>R$ {calculatePrice()}</div>
     </div>
   );
 };
