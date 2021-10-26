@@ -22,6 +22,8 @@
     "no-use-before-define": "off",
     "no-unused-vars": "off",
     "no-unused-expressions": "off",
+    "no-restricted-properties": "off",
+    "no-plusplus": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
     "import/extensions": [
       "error",
