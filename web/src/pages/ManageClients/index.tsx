@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import React, { useEffect, useState } from 'react';
 import { Button, FormControl } from '@mui/material';
 import dadosClientes from '../../assets/JSON_data/dadosClientes.json';
