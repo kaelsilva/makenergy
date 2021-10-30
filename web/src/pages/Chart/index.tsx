@@ -6,6 +6,7 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
+  speedDialClasses,
 } from '@mui/material';
 import dadosUsina from '../../assets/JSON_data/dadosUsina.json';
 
@@ -15,11 +16,11 @@ interface IPlotData {
   amp: number;
 }
 
-interface IMeanString {
-  meanPotency: string;
-  meanCurrent: string;
-  meanTension: string;
-  meanTemperature: string;
+interface IMean {
+  meanPotency: number;
+  meanCurrent: number;
+  meanTension: number;
+  meanTemperature: number;
 }
 
 const Chart: React.FC = () => {
@@ -38,7 +39,12 @@ const Chart: React.FC = () => {
         });
 
         setPlotData(dataArray);
-        setMeanValue(calculateMean().meanPotency);
+        setMeanValue(
+          calculateMean().meanPotency.toLocaleString('pt-br', {
+            maximumFractionDigits: 2,
+          })
+        );
+        setMeanUnity('kW');
         break;
       }
       case 'tension': {
@@ -46,7 +52,12 @@ const Chart: React.FC = () => {
           dataArray = [...dataArray, { uv: item.tensao_V, amp: item.tempo_h }];
         });
         setPlotData(dataArray);
-        setMeanValue(calculateMean().meanTension);
+        setMeanValue(
+          calculateMean().meanTension.toLocaleString('pt-br', {
+            maximumFractionDigits: 2,
+          })
+        );
+        setMeanUnity('V');
         break;
       }
       case 'current': {
@@ -57,7 +68,12 @@ const Chart: React.FC = () => {
           ];
         });
         setPlotData(dataArray);
-        setMeanValue(calculateMean().meanCurrent);
+        setMeanValue(
+          calculateMean().meanCurrent.toLocaleString('pt-br', {
+            maximumFractionDigits: 2,
+          })
+        );
+        setMeanUnity('A');
         break;
       }
       case 'temperature': {
@@ -68,7 +84,12 @@ const Chart: React.FC = () => {
           ];
         });
         setPlotData(dataArray);
-        setMeanValue(calculateMean().meanTemperature);
+        setMeanValue(
+          calculateMean().meanTemperature.toLocaleString('pt-br', {
+            maximumFractionDigits: 2,
+          })
+        );
+        setMeanUnity('ºC');
         break;
       }
       default: {
@@ -94,14 +115,7 @@ const Chart: React.FC = () => {
     return result;
   };
 
-  const calculateMean = (): IMeanString => {
-    interface IMean {
-      meanPotency: number;
-      meanCurrent: number;
-      meanTension: number;
-      meanTemperature: number;
-    }
-
+  const calculateMean = (): IMean => {
     const meanValues: IMean = {
       meanPotency: 0,
       meanCurrent: 0,
@@ -109,42 +123,134 @@ const Chart: React.FC = () => {
       meanTemperature: 0,
     };
 
-    let normalization = 0;
     dadosUsina.forEach((item) => {
-      normalization += 1;
-      meanValues.meanCurrent += item.corrente_A;
-      meanValues.meanPotency += item.potencia_kW;
-      meanValues.meanTemperature += item.temperatura_C;
-      meanValues.meanTension += item.tensao_V;
+      meanValues.meanCurrent += item.corrente_A / dadosUsina.length;
+      meanValues.meanPotency += item.potencia_kW / dadosUsina.length;
+      meanValues.meanTemperature += item.temperatura_C / dadosUsina.length;
+      meanValues.meanTension += item.tensao_V / dadosUsina.length;
     });
 
-    return {
-      meanCurrent: `${(meanValues.meanCurrent / normalization).toLocaleString(
-        'pt-br',
-        {
-          maximumFractionDigits: 2,
-        }
-      )} A`,
-      meanPotency: `${(meanValues.meanPotency / normalization).toLocaleString(
-        'pt-br',
-        {
-          maximumFractionDigits: 2,
-        }
-      )} W`,
-      meanTemperature: `${(
-        meanValues.meanTemperature / normalization
-      ).toLocaleString('pt-br', {
-        maximumFractionDigits: 2,
-      })} ºC`,
-      meanTension: `${(meanValues.meanTension / normalization).toLocaleString(
-        'pt-br',
-        {
-          maximumFractionDigits: 2,
-        }
-      )} V`,
-    } as IMeanString;
+    return meanValues;
   };
+
   const [meanValue, setMeanValue] = useState<string>();
+  const [meanUnity, setMeanUnity] = useState<string>();
+
+  const calculateStandardDeviation = (): string => {
+    switch (plotVariable) {
+      case 'temperature': {
+        const mean = calculateMean().meanTemperature;
+        let sd = 0;
+        dadosUsina.forEach((item) => {
+          sd += Math.pow(Math.abs(mean - item.temperatura_C), 2);
+        });
+        const variancy = sd / dadosUsina.length;
+        const result = Math.sqrt(variancy);
+        return result.toLocaleString('pt-br', { maximumFractionDigits: 2 });
+      }
+      case 'potency': {
+        const mean = calculateMean().meanPotency;
+        let sd = 0;
+        dadosUsina.forEach((item) => {
+          sd += Math.pow(Math.abs(mean - item.potencia_kW), 2);
+        });
+        const variancy = sd / dadosUsina.length;
+        const result = Math.sqrt(variancy);
+        return result.toLocaleString('pt-br', { maximumFractionDigits: 2 });
+      }
+      case 'current': {
+        const mean = calculateMean().meanCurrent;
+        let sd = 0;
+        dadosUsina.forEach((item) => {
+          sd += Math.pow(Math.abs(mean - item.corrente_A), 2);
+        });
+        const variancy = sd / dadosUsina.length;
+        const result = Math.sqrt(variancy);
+        return result.toLocaleString('pt-br', { maximumFractionDigits: 2 });
+      }
+      case 'tension': {
+        const mean = calculateMean().meanTension;
+        let sd = 0;
+        dadosUsina.forEach((item) => {
+          sd += Math.pow(Math.abs(mean - item.tensao_V), 2);
+        });
+        const variancy = sd / dadosUsina.length;
+        const result = Math.sqrt(variancy);
+        return result.toLocaleString('pt-br', { maximumFractionDigits: 2 });
+      }
+      default: {
+        return '';
+      }
+    }
+  };
+
+  const findMinimumValue = (): string => {
+    const valueArray: number[] = [];
+
+    switch (plotVariable) {
+      case 'potency': {
+        dadosUsina.forEach((item) => valueArray.push(item.potencia_kW));
+        return Math.min(...valueArray).toLocaleString('pt-br', {
+          maximumFractionDigits: 2,
+        });
+      }
+      case 'tension': {
+        dadosUsina.forEach((item) => valueArray.push(item.tensao_V));
+        return Math.min(...valueArray).toLocaleString('pt-br', {
+          maximumFractionDigits: 2,
+        });
+      }
+      case 'temperature': {
+        dadosUsina.forEach((item) => valueArray.push(item.temperatura_C));
+        return Math.min(...valueArray).toLocaleString('pt-br', {
+          maximumFractionDigits: 2,
+        });
+      }
+      case 'current': {
+        dadosUsina.forEach((item) => valueArray.push(item.corrente_A));
+        return Math.min(...valueArray).toLocaleString('pt-br', {
+          maximumFractionDigits: 2,
+        });
+      }
+      default: {
+        return '';
+      }
+    }
+  };
+
+  const findMaximumValue = (): string => {
+    const valueArray: number[] = [];
+
+    switch (plotVariable) {
+      case 'potency': {
+        dadosUsina.forEach((item) => valueArray.push(item.potencia_kW));
+        return Math.max(...valueArray).toLocaleString('pt-br', {
+          maximumFractionDigits: 2,
+        });
+      }
+      case 'tension': {
+        dadosUsina.forEach((item) => valueArray.push(item.tensao_V));
+        return Math.max(...valueArray).toLocaleString('pt-br', {
+          maximumFractionDigits: 2,
+        });
+      }
+      case 'temperature': {
+        dadosUsina.forEach((item) => valueArray.push(item.temperatura_C));
+        return Math.max(...valueArray).toLocaleString('pt-br', {
+          maximumFractionDigits: 2,
+        });
+      }
+      case 'current': {
+        dadosUsina.forEach((item) => valueArray.push(item.corrente_A));
+        return Math.max(...valueArray).toLocaleString('pt-br', {
+          maximumFractionDigits: 2,
+        });
+      }
+      default: {
+        return '';
+      }
+    }
+  };
 
   const handlePlotVariableChange = (event: SelectChangeEvent): void => {
     setPlotVariable(event.target.value);
@@ -171,7 +277,7 @@ const Chart: React.FC = () => {
           <MenuItem value="tension">Tensão</MenuItem>
         </Select>
       </FormControl>
-      <LineChart width={800} height={600} data={data}>
+      <LineChart width={600} height={400} data={data}>
         <XAxis
           dataKey="amp"
           type="number"
@@ -191,7 +297,10 @@ const Chart: React.FC = () => {
         <Line type="monotone" dataKey="uv" stroke="#8884d8" dot={false} />
       </LineChart>
       <div>Retorno financeiro: R$ {calculatePrice()}</div>
-      <div>Média: {meanValue}</div>
+      <div>Média: {`${meanValue} ${meanUnity}`}</div>
+      <div>Desvio padrão: {calculateStandardDeviation()}</div>
+      <div>Mínimo: {`${findMinimumValue()} ${meanUnity}`}</div>
+      <div>Máximo: {`${findMaximumValue()} ${meanUnity}`}</div>
     </div>
   );
 };
