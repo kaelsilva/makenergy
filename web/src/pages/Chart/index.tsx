@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis } from 'recharts';
 import {
@@ -16,19 +15,20 @@ interface IPlotData {
   amp: number;
 }
 
-interface IPlotVariable {
-  type: string;
+interface IMeanString {
+  meanPotency: string;
+  meanCurrent: string;
+  meanTension: string;
+  meanTemperature: string;
 }
 
 const Chart: React.FC = () => {
   const [plotData, setPlotData] = useState<IPlotData[]>();
-  const [plotVariable, setPlotVariable] = useState<IPlotVariable>({
-    type: 'potency',
-  });
+  const [plotVariable, setPlotVariable] = useState<string>('potency');
 
   useEffect(() => {
     let dataArray: IPlotData[] = [];
-    switch (plotVariable.type) {
+    switch (plotVariable) {
       case 'potency': {
         dadosUsina.forEach((item) => {
           dataArray = [
@@ -38,6 +38,7 @@ const Chart: React.FC = () => {
         });
 
         setPlotData(dataArray);
+        setMeanValue(calculateMean().meanPotency);
         break;
       }
       case 'tension': {
@@ -45,6 +46,7 @@ const Chart: React.FC = () => {
           dataArray = [...dataArray, { uv: item.tensao_V, amp: item.tempo_h }];
         });
         setPlotData(dataArray);
+        setMeanValue(calculateMean().meanTension);
         break;
       }
       case 'current': {
@@ -55,6 +57,7 @@ const Chart: React.FC = () => {
           ];
         });
         setPlotData(dataArray);
+        setMeanValue(calculateMean().meanCurrent);
         break;
       }
       case 'temperature': {
@@ -65,6 +68,7 @@ const Chart: React.FC = () => {
           ];
         });
         setPlotData(dataArray);
+        setMeanValue(calculateMean().meanTemperature);
         break;
       }
       default: {
@@ -79,18 +83,71 @@ const Chart: React.FC = () => {
     const priceUnityKWh = 0.95;
     const time = dadosUsina[1].tempo_h - dadosUsina[0].tempo_h;
     let pot = 0;
-    dadosUsina.forEach((data) => {
-      pot += data.potencia_kW;
+    dadosUsina.forEach((item) => {
+      pot += item.potencia_kW;
     });
 
-    const result = (pot * time * priceUnityKWh).toLocaleString('pt-bt', {
+    const result = (pot * time * priceUnityKWh).toLocaleString('pt-br', {
       maximumFractionDigits: 2,
     });
 
     return result;
   };
+
+  const calculateMean = (): IMeanString => {
+    interface IMean {
+      meanPotency: number;
+      meanCurrent: number;
+      meanTension: number;
+      meanTemperature: number;
+    }
+
+    const meanValues: IMean = {
+      meanPotency: 0,
+      meanCurrent: 0,
+      meanTension: 0,
+      meanTemperature: 0,
+    };
+
+    let normalization = 0;
+    dadosUsina.forEach((item) => {
+      normalization += 1;
+      meanValues.meanCurrent += item.corrente_A;
+      meanValues.meanPotency += item.potencia_kW;
+      meanValues.meanTemperature += item.temperatura_C;
+      meanValues.meanTension += item.tensao_V;
+    });
+
+    return {
+      meanCurrent: `${(meanValues.meanCurrent / normalization).toLocaleString(
+        'pt-br',
+        {
+          maximumFractionDigits: 2,
+        }
+      )} A`,
+      meanPotency: `${(meanValues.meanPotency / normalization).toLocaleString(
+        'pt-br',
+        {
+          maximumFractionDigits: 2,
+        }
+      )} W`,
+      meanTemperature: `${(
+        meanValues.meanTemperature / normalization
+      ).toLocaleString('pt-br', {
+        maximumFractionDigits: 2,
+      })} ºC`,
+      meanTension: `${(meanValues.meanTension / normalization).toLocaleString(
+        'pt-br',
+        {
+          maximumFractionDigits: 2,
+        }
+      )} V`,
+    } as IMeanString;
+  };
+  const [meanValue, setMeanValue] = useState<string>();
+
   const handlePlotVariableChange = (event: SelectChangeEvent): void => {
-    setPlotVariable({ type: event.target.value });
+    setPlotVariable(event.target.value);
   };
 
   const formatter = (num: number): string => {
@@ -133,7 +190,8 @@ const Chart: React.FC = () => {
         />
         <Line type="monotone" dataKey="uv" stroke="#8884d8" dot={false} />
       </LineChart>
-      <div>R$ {calculatePrice()}</div>
+      <div>Retorno financeiro: R$ {calculatePrice()}</div>
+      <div>Média: {meanValue}</div>
     </div>
   );
 };
