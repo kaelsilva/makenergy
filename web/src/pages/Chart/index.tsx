@@ -6,7 +6,6 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
-  speedDialClasses,
 } from '@mui/material';
 import dadosUsina from '../../assets/JSON_data/dadosUsina.json';
 
