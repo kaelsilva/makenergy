@@ -5,8 +5,8 @@ import ManageClients from './pages/ManageClients';
 const App: React.FC = () => {
   return (
     <>
-      <Chart />
-      {/* <ManageClients /> */}
+      {/* <Chart /> */}
+      <ManageClients />
     </>
   );
 };
