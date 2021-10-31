@@ -1,12 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { Button, FormControl } from '@mui/material';
+import React, { FormEvent, useEffect, useState } from 'react';
+import { FormControl, Select, MenuItem } from '@mui/material';
+import { FiMenu } from 'react-icons/fi';
+import {
+  Button,
+  Toolbar,
+  LogoToolbar,
+  List,
+  ListItemText,
+  DeleteButton,
+  CreateButton,
+  CreationContainer,
+  InputText,
+  H1,
+} from './styles';
 import dadosClientes from '../../assets/JSON_data/dadosClientes.json';
+import logo from '../../assets/images/logo-Sharenergy-01.png';
 
 interface IPowerPlantParticipation {
   usinaId: number;
   percentualDeParticipacao: number;
 }
 
+interface IPowerPlant {
+  id: number;
+}
 interface IClient {
   numeroCliente: number;
   nomeCliente: string;
@@ -15,6 +32,12 @@ interface IClient {
 
 const ManageClients: React.FC = () => {
   const [clients, setClients] = useState<IClient[]>([]);
+  const [creationBox, setCreationBox] = useState<boolean>(false);
+  const [powerPlants, setPowerPlants] = useState<IPowerPlant[]>([
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+  ]);
 
   useEffect(() => {
     let clientData: IClient[] = [];
@@ -59,11 +82,67 @@ const ManageClients: React.FC = () => {
     setClients([...clientList]);
   };
 
+  const handleForm = (event: FormEvent) => {
+    event.preventDefault();
+    console.log(event.currentTarget);
+    alert('teste');
+  };
+
   return (
     <div>
-      {clients.map((client) => (
-        <p>{client.nomeCliente}</p>
-      ))}
+      <Toolbar>
+        <FiMenu size="48px" />
+        <LogoToolbar src={logo} alt="Logo for the app" />
+      </Toolbar>
+
+      <CreateButton onClick={() => setCreationBox(!creationBox)}>
+        Criar
+      </CreateButton>
+
+      {creationBox && (
+        <CreationContainer onSubmit={(event) => handleForm(event)}>
+          <H1>Novo cliente</H1>
+          <InputText type="text" placeholder="Nome" />
+          <Select
+            labelId="select-power-plant"
+            id="power-plant-select"
+            label="variable"
+            defaultValue="1"
+            onChange={() => console.log('mudou')}
+          >
+            {powerPlants.map((powerPlant) => (
+              <MenuItem value={powerPlant.id.toString()}>
+                {powerPlant.id}
+              </MenuItem>
+            ))}
+          </Select>
+          <InputText
+            type="text"
+            placeholder="% de participação na usina (apenas números)"
+          />
+          <CreateButton type="submit">Confirmar criação</CreateButton>
+        </CreationContainer>
+      )}
+
+      <List>
+        {clients.map((client) => (
+          <ListItemText id={client.numeroCliente.toString()}>
+            {client.nomeCliente}
+            <FormControl id="delete-client">
+              <DeleteButton
+                type="submit"
+                onClick={() => deleteClient(client.numeroCliente)}
+              >
+                Deletar
+              </DeleteButton>
+            </FormControl>
+
+            <CreateButton onClick={() => console.log('atualizar')}>
+              Editar
+            </CreateButton>
+          </ListItemText>
+        ))}
+      </List>
       <FormControl id="create-client">
         <h2>Create</h2>
         <Button
@@ -93,13 +172,6 @@ const ManageClients: React.FC = () => {
           }
         >
           Update
-        </Button>
-      </FormControl>
-
-      <FormControl id="delete-client">
-        <h2>Delete</h2>
-        <Button type="submit" onClick={() => deleteClient(55)}>
-          Delete
         </Button>
       </FormControl>
     </div>
