@@ -1,8 +1,7 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { FormControl, Select, MenuItem } from '@mui/material';
-import { FiMenu } from 'react-icons/fi';
+import { FiMenu, FiPlus } from 'react-icons/fi';
 import {
-  Button,
   Toolbar,
   LogoToolbar,
   List,
@@ -14,6 +13,10 @@ import {
   InputText,
   H1,
   EditContainer,
+  CancelButton,
+  NewButton,
+  ListItemContainer,
+  ButtonContainer,
 } from './styles';
 import dadosClientes from '../../assets/JSON_data/dadosClientes.json';
 import logo from '../../assets/images/logo-Sharenergy-01.png';
@@ -120,7 +123,7 @@ const ManageClients: React.FC = () => {
   };
 
   return (
-    <div>
+    <>
       <Toolbar>
         <FiMenu size="48px" />
         <LogoToolbar src={logo} alt="Logo for the app" />
@@ -172,14 +175,18 @@ const ManageClients: React.FC = () => {
                 ...createUserForm,
                 usinas: [
                   {
-                    usinaId: 0,
+                    usinaId: Number(e.currentTarget.value),
                     percentualDeParticipacao: Number(e.currentTarget.value),
                   },
                 ],
               });
             }}
           />
+
           <CreateButton type="submit">Confirmar criação</CreateButton>
+          <CancelButton onClick={() => setCreationBox(false)}>
+            Cancelar
+          </CancelButton>
         </CreationContainer>
       )}
 
@@ -238,33 +245,58 @@ const ManageClients: React.FC = () => {
               />
             </>
           ))}
-          <CreateButton type="submit">Confirmar edição</CreateButton>
+
+          {/* <NewButton
+            onClick={() =>
+              setClientEditForm({
+                ...clientEditForm,
+                usinas: [
+                  ...clientEditForm.usinas,
+                  {
+                    usinaId: 0,
+                    percentualDeParticipacao: 0,
+                  },
+                ],
+              })
+            }
+          >
+            <FiPlus size="25px" />
+          </NewButton> */}
+
+          <EditButton type="submit">Confirmar edição</EditButton>
+          <CancelButton onClick={() => setEditBox(false)}>
+            Cancelar
+          </CancelButton>
         </EditContainer>
       )}
 
       <List>
         {clients.map((client) => (
-          <ListItemText id={client.numeroCliente.toString()}>
-            {client.nomeCliente}
+          <ListItemContainer>
+            <ListItemText id={client.numeroCliente.toString()}>
+              {client.nomeCliente}
+            </ListItemText>
             <FormControl id="delete-client">
-              <DeleteButton
-                type="submit"
-                onClick={() => deleteClient(client.numeroCliente)}
-              >
-                Deletar
-              </DeleteButton>
+              <ButtonContainer>
+                <DeleteButton
+                  type="submit"
+                  onClick={() => deleteClient(client.numeroCliente)}
+                >
+                  Deletar
+                </DeleteButton>
 
-              <EditButton
-                type="submit"
-                onClick={() => handleUpdateButtonClick(client)}
-              >
-                Editar
-              </EditButton>
+                <EditButton
+                  type="submit"
+                  onClick={() => handleUpdateButtonClick(client)}
+                >
+                  Editar
+                </EditButton>
+              </ButtonContainer>
             </FormControl>
-          </ListItemText>
+          </ListItemContainer>
         ))}
       </List>
-    </div>
+    </>
   );
 };
 
