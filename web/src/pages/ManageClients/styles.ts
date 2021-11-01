@@ -31,6 +31,7 @@ export const ListItemContainer = styled.div`
 
 export const ListItemText = styled(MListItemText)`
   background-color: #fefefe;
+  margin-left: 20px;
 `;
 
 export const DeleteButton = styled(MButton)`
