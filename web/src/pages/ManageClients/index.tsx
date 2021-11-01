@@ -1,9 +1,8 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { FormControl, Select, MenuItem } from '@mui/material';
-import { FiMenu, FiPlus } from 'react-icons/fi';
+import { FiPlus } from 'react-icons/fi';
+import Toolbar from '../../components/Toolbar';
 import {
-  Toolbar,
-  LogoToolbar,
   List,
   ListItemText,
   DeleteButton,
@@ -124,10 +123,7 @@ const ManageClients: React.FC = () => {
 
   return (
     <>
-      <Toolbar>
-        <FiMenu size="48px" />
-        <LogoToolbar src={logo} alt="Logo for the app" />
-      </Toolbar>
+      <Toolbar />
 
       <CreateButton onClick={() => setCreationBox(true)}>Criar</CreateButton>
 

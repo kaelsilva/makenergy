@@ -14,16 +14,6 @@ export const Button = styled(MButton)`
   background-color: #000;
 `;
 
-export const Toolbar = styled(MToolbar)`
-  background-color: #fff;
-  align-items: center;
-`;
-
-export const LogoToolbar = styled.img`
-  height: 56px;
-  margin-left: 48px;
-`;
-
 export const List = styled(MList)`
   display: flex;
   flex-direction: column;
