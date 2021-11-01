@@ -8,6 +8,7 @@ import {
   List,
   ListItemText,
   DeleteButton,
+  EditButton,
   CreateButton,
   CreationContainer,
   InputText,
@@ -33,6 +34,11 @@ interface IClient {
 const ManageClients: React.FC = () => {
   const [clients, setClients] = useState<IClient[]>([]);
   const [creationBox, setCreationBox] = useState<boolean>(false);
+  const [createUserForm, setCreateUserForm] = useState<IClient>({
+    nomeCliente: '',
+    numeroCliente: 0,
+    usinas: [],
+  });
   const [powerPlants, setPowerPlants] = useState<IPowerPlant[]>([
     { id: 1 },
     { id: 2 },
@@ -84,8 +90,15 @@ const ManageClients: React.FC = () => {
 
   const handleForm = (event: FormEvent) => {
     event.preventDefault();
-    console.log(event.currentTarget);
-    alert('teste');
+
+    const generatedNumeroCliente = Number((Math.random() * 3000).toFixed());
+
+    setCreateUserForm({
+      ...createUserForm,
+      numeroCliente: generatedNumeroCliente,
+    });
+    createClient(createUserForm);
+    setCreationBox(false);
   };
 
   return (
@@ -102,13 +115,32 @@ const ManageClients: React.FC = () => {
       {creationBox && (
         <CreationContainer onSubmit={(event) => handleForm(event)}>
           <H1>Novo cliente</H1>
-          <InputText type="text" placeholder="Nome" />
+          <InputText
+            type="text"
+            placeholder="Nome"
+            onChange={(e) =>
+              setCreateUserForm({
+                ...createUserForm,
+                nomeCliente: e.currentTarget.value,
+              })
+            }
+          />
           <Select
             labelId="select-power-plant"
             id="power-plant-select"
             label="variable"
             defaultValue="1"
-            onChange={() => console.log('mudou')}
+            onChange={(e) =>
+              setCreateUserForm({
+                ...createUserForm,
+                usinas: [
+                  {
+                    usinaId: Number(e.target.value),
+                    percentualDeParticipacao: 0,
+                  },
+                ],
+              })
+            }
           >
             {powerPlants.map((powerPlant) => (
               <MenuItem value={powerPlant.id.toString()}>
@@ -119,6 +151,17 @@ const ManageClients: React.FC = () => {
           <InputText
             type="text"
             placeholder="% de participação na usina (apenas números)"
+            onChange={(e) => {
+              setCreateUserForm({
+                ...createUserForm,
+                usinas: [
+                  {
+                    usinaId: 0,
+                    percentualDeParticipacao: Number(e.currentTarget.value),
+                  },
+                ],
+              });
+            }}
           />
           <CreateButton type="submit">Confirmar criação</CreateButton>
         </CreationContainer>
@@ -137,27 +180,12 @@ const ManageClients: React.FC = () => {
               </DeleteButton>
             </FormControl>
 
-            <CreateButton onClick={() => console.log('atualizar')}>
+            <EditButton onClick={() => setCreationBox(!creationBox)}>
               Editar
-            </CreateButton>
+            </EditButton>
           </ListItemText>
         ))}
       </List>
-      <FormControl id="create-client">
-        <h2>Create</h2>
-        <Button
-          type="submit"
-          onClick={() =>
-            createClient({
-              nomeCliente: 'Joãooo',
-              numeroCliente: 55,
-              usinas: [{ percentualDeParticipacao: 100, usinaId: 2 }],
-            })
-          }
-        >
-          Create
-        </Button>
-      </FormControl>
 
       <FormControl id="update-client">
         <h2>Update</h2>

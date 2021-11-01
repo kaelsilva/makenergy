@@ -55,16 +55,31 @@ export const CreateButton = styled(MButton)`
     border-radius: 5px;
 
     &:hover {
-      background-color: ${shade(0.2, '#4BB543')};
+      background-color: ${shade(0.2, '#4bb543')};
+    }
+  }
+`;
+
+export const EditButton = styled(MButton)`
+  && {
+    background-color: #5434bb;
+    color: #fff;
+    border-radius: 5px;
+
+    &:hover {
+      background-color: ${shade(0.2, '#5434bb')};
     }
   }
 `;
 
 export const CreationContainer = styled.form`
   && {
-    position: relative;
-    top: -1px;
+    background-color: #fff;
+    position: absolute;
+    z-index: 1;
+    top: 100px;
     display: flex;
+    flex-direction: column;
     height: 300px;
     justify-content: space-between;
     width: 400px;
@@ -76,10 +91,6 @@ export const CreationContainer = styled.form`
   }
 `;
 
-export const InputText = styled(Input)`
-  padding: 20px;
-`;
-
 export const H1 = styled(Typography)`
   && {
     align-self: center;
@@ -87,4 +98,13 @@ export const H1 = styled(Typography)`
     font-size: 28px;
     font-weight: 500;
   }
+`;
+
+export const CreationContainerHeader = styled.div`
+  display: flex;
+  flex: 1;
+`;
+
+export const InputText = styled(Input)`
+  padding: 20px;
 `;
