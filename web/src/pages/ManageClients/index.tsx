@@ -13,6 +13,7 @@ import {
   CreationContainer,
   InputText,
   H1,
+  EditContainer,
 } from './styles';
 import dadosClientes from '../../assets/JSON_data/dadosClientes.json';
 import logo from '../../assets/images/logo-Sharenergy-01.png';
@@ -34,7 +35,13 @@ interface IClient {
 const ManageClients: React.FC = () => {
   const [clients, setClients] = useState<IClient[]>([]);
   const [creationBox, setCreationBox] = useState<boolean>(false);
+  const [editBox, setEditBox] = useState<boolean>(false);
   const [createUserForm, setCreateUserForm] = useState<IClient>({
+    nomeCliente: '',
+    numeroCliente: 0,
+    usinas: [],
+  });
+  const [clientEditForm, setClientEditForm] = useState<IClient>({
     nomeCliente: '',
     numeroCliente: 0,
     usinas: [],
@@ -101,6 +108,17 @@ const ManageClients: React.FC = () => {
     setCreationBox(false);
   };
 
+  const handleEditForm = (event: FormEvent) => {
+    event.preventDefault();
+    updateClient(clientEditForm);
+    setEditBox(false);
+  };
+
+  const handleUpdateButtonClick = (client: IClient) => {
+    setEditBox(true);
+    setClientEditForm(client);
+  };
+
   return (
     <div>
       <Toolbar>
@@ -108,9 +126,7 @@ const ManageClients: React.FC = () => {
         <LogoToolbar src={logo} alt="Logo for the app" />
       </Toolbar>
 
-      <CreateButton onClick={() => setCreationBox(!creationBox)}>
-        Criar
-      </CreateButton>
+      <CreateButton onClick={() => setCreationBox(true)}>Criar</CreateButton>
 
       {creationBox && (
         <CreationContainer onSubmit={(event) => handleForm(event)}>
@@ -167,6 +183,65 @@ const ManageClients: React.FC = () => {
         </CreationContainer>
       )}
 
+      {editBox && (
+        <EditContainer onSubmit={(event) => handleEditForm(event)}>
+          <H1>Editar cliente</H1>
+
+          <InputText
+            type="text"
+            placeholder="Nome"
+            value={clientEditForm.nomeCliente}
+            onChange={(e) =>
+              setClientEditForm({
+                ...clientEditForm,
+                nomeCliente: e.currentTarget.value,
+              })
+            }
+          />
+          <Select
+            labelId="select-power-plant"
+            id="power-plant-select"
+            label="variable"
+            defaultValue="1"
+            onChange={(e) =>
+              setClientEditForm({
+                ...clientEditForm,
+              })
+            }
+          >
+            {powerPlants.map((powerPlant) => (
+              <MenuItem value={powerPlant.id.toString()}>
+                {powerPlant.id}
+              </MenuItem>
+            ))}
+          </Select>
+
+          {clientEditForm.usinas.map((powerPlant) => (
+            <>
+              <div>{`Participação na Usina ${powerPlant.usinaId} (em %):`}</div>
+              <InputText
+                type="text"
+                value={powerPlant.percentualDeParticipacao.toString()}
+                placeholder="% de participação na usina (apenas números)"
+                onChange={(e) => {
+                  setClientEditForm({
+                    ...clientEditForm,
+                    usinas: [
+                      {
+                        ...clientEditForm.usinas,
+                        usinaId: powerPlant.usinaId,
+                        percentualDeParticipacao: Number(e.currentTarget.value),
+                      },
+                    ],
+                  });
+                }}
+              />
+            </>
+          ))}
+          <CreateButton type="submit">Confirmar edição</CreateButton>
+        </EditContainer>
+      )}
+
       <List>
         {clients.map((client) => (
           <ListItemText id={client.numeroCliente.toString()}>
@@ -178,30 +253,17 @@ const ManageClients: React.FC = () => {
               >
                 Deletar
               </DeleteButton>
-            </FormControl>
 
-            <EditButton onClick={() => setCreationBox(!creationBox)}>
-              Editar
-            </EditButton>
+              <EditButton
+                type="submit"
+                onClick={() => handleUpdateButtonClick(client)}
+              >
+                Editar
+              </EditButton>
+            </FormControl>
           </ListItemText>
         ))}
       </List>
-
-      <FormControl id="update-client">
-        <h2>Update</h2>
-        <Button
-          type="submit"
-          onClick={() =>
-            updateClient({
-              nomeCliente: 'João',
-              numeroCliente: 55,
-              usinas: [{ percentualDeParticipacao: 100, usinaId: 2 }],
-            })
-          }
-        >
-          Update
-        </Button>
-      </FormControl>
     </div>
   );
 };
