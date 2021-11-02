@@ -3,7 +3,6 @@ import { FiHome, FiActivity, FiLogOut } from 'react-icons/fi';
 import { Container, LinkList, ItemLink, ListItem } from './styles';
 
 const Sidebar: React.FC = () => {
-  const [menuClicked, setMenuClicked] = useState<boolean>(true);
   return (
     <>
       <Container>

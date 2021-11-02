@@ -190,7 +190,6 @@ const ManageClients: React.FC = () => {
   return (
     <>
       <Toolbar />
-
       <CreateButton onClick={() => setCreationBox(true)}>Criar</CreateButton>
       <BodyContainer>
         <Sidebar />

@@ -9,6 +9,10 @@ export const Container = styled.nav`
   width: 25vw;
 
   animation: ${AppearFromLeft} 0.5s;
+
+  @media only screen and (max-width: 700px) {
+    visibility: hidden;
+  }
 `;
 
 export const LinkList = styled(List)`
