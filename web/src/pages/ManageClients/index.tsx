@@ -5,7 +5,7 @@ import {
   MenuItem,
   SelectChangeEvent,
 } from '@mui/material';
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiDelete } from 'react-icons/fi';
 import Toolbar from '../../components/Toolbar';
 import {
   List,
@@ -25,7 +25,6 @@ import {
   Label,
 } from './styles';
 import dadosClientes from '../../assets/JSON_data/dadosClientes.json';
-import logo from '../../assets/images/logo-Sharenergy-01.png';
 
 interface IPowerPlantParticipation {
   usinaId: number;
@@ -128,32 +127,6 @@ const ManageClients: React.FC = () => {
     setClientEditForm(client);
   };
 
-  const handleUpdateSelectPowerPlant = (event: SelectChangeEvent) => {
-    setCreateUserForm({
-      ...createUserForm,
-      usinas: [
-        {
-          usinaId: Number(event.target.value),
-          percentualDeParticipacao: 0,
-        },
-      ],
-    });
-  };
-
-  const handleUpdateParticipationInput = (
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setCreateUserForm({
-      ...createUserForm,
-      usinas: [
-        {
-          usinaId: createUserForm.usinas[0].usinaId,
-          percentualDeParticipacao: Number(event.currentTarget.value),
-        },
-      ],
-    });
-  };
-
   const handleUpdatePowerPlantOnAlter = (
     event: SelectChangeEvent,
     usinaId: number
@@ -198,6 +171,20 @@ const ManageClients: React.FC = () => {
     }
   };
 
+  const handleDeletePowerPlantFromClient = (usinaId: number): undefined => {
+    const powerPlantIndex = clientEditForm.usinas.findIndex(
+      (item) => item.usinaId === usinaId
+    );
+
+    const currentPowerPlants = clientEditForm.usinas;
+
+    currentPowerPlants.splice(powerPlantIndex, 1);
+
+    setClientEditForm({ ...clientEditForm, usinas: currentPowerPlants });
+
+    return undefined;
+  };
+
   return (
     <>
       <Toolbar />
@@ -208,39 +195,19 @@ const ManageClients: React.FC = () => {
         <CreationContainer onSubmit={(event) => handleForm(event)}>
           <H1>Novo cliente</H1>
           <FormControl variant="standard">
-            <InputText
-              type="text"
-              placeholder="Nome"
-              onChange={(e) =>
-                setCreateUserForm({
-                  ...createUserForm,
-                  nomeCliente: e.currentTarget.value,
-                })
-              }
-            />
-          </FormControl>
-
-          <FormControl variant="standard">
-            <Select
-              labelId="select-power-plant"
-              id="power-plant-select"
-              label="variable"
-              onChange={handleUpdateSelectPowerPlant}
-            >
-              {powerPlants.map((powerPlant) => (
-                <MenuItem value={powerPlant.id.toString()}>
-                  {powerPlant.id}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl variant="standard">
-            <InputText
-              type="text"
-              placeholder="% de participação na usina (apenas números)"
-              onChange={handleUpdateParticipationInput}
-            />
+            <LabelAndInputContainer>
+              <Label>Nome:</Label>
+              <InputText
+                type="text"
+                placeholder="Nome"
+                onChange={(e) =>
+                  setCreateUserForm({
+                    ...createUserForm,
+                    nomeCliente: e.currentTarget.value,
+                  })
+                }
+              />
+            </LabelAndInputContainer>
           </FormControl>
 
           <CreateButton type="submit">Confirmar criação</CreateButton>
@@ -278,7 +245,7 @@ const ManageClients: React.FC = () => {
                 labelId="select-power-plant"
                 id="power-plant-select"
                 label="variable"
-                defaultValue={powerPlant.usinaId.toString()}
+                value={powerPlant.usinaId.toString()}
                 onChange={(event: SelectChangeEvent) =>
                   handleUpdatePowerPlantOnAlter(event, powerPlant.usinaId)
                 }
@@ -288,7 +255,6 @@ const ManageClients: React.FC = () => {
                 ))}
               </Select>
 
-              {/* <div>{`Participação na Usina ${powerPlant.usinaId} (em %):`}</div> */}
               <Label>Participação (%):</Label>
               <InputText
                 id="Percent"
@@ -301,6 +267,13 @@ const ManageClients: React.FC = () => {
                     powerPlant.usinaId
                   )
                 }
+              />
+              <FiDelete
+                size="28px"
+                onClick={() =>
+                  handleDeletePowerPlantFromClient(powerPlant.usinaId)
+                }
+                style={{ color: 'red', cursor: 'pointer' }}
               />
             </LabelAndInputContainer>
           ))}
