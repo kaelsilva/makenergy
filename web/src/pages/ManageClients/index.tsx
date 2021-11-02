@@ -24,6 +24,9 @@ import {
   LabelAndInputContainer,
   Label,
   BodyContainer,
+  ClientListContainer,
+  FiPlusStyled,
+  NewClientButton,
 } from './styles';
 import Sidebar from '../../components/Sidebar';
 import dadosClientes from '../../assets/JSON_data/dadosClientes.json';
@@ -190,7 +193,6 @@ const ManageClients: React.FC = () => {
   return (
     <>
       <Toolbar />
-      <CreateButton onClick={() => setCreationBox(true)}>Criar</CreateButton>
       <BodyContainer>
         <Sidebar />
 
@@ -305,32 +307,38 @@ const ManageClients: React.FC = () => {
           </EditContainer>
         )}
 
-        <List>
-          {clients.map((client) => (
-            <ListItemContainer>
-              <ListItemText id={client.numeroCliente.toString()}>
-                {client.nomeCliente}
-              </ListItemText>
-              <FormControl id="delete-client">
-                <ButtonContainer>
-                  <DeleteButton
-                    type="submit"
-                    onClick={() => deleteClient(client.numeroCliente)}
-                  >
-                    Deletar
-                  </DeleteButton>
+        <ClientListContainer>
+          <NewClientButton onClick={() => setCreationBox(true)}>
+            <FiPlusStyled />
+            Novo Cliente
+          </NewClientButton>
+          <List>
+            {clients.map((client) => (
+              <ListItemContainer>
+                <ListItemText id={client.numeroCliente.toString()}>
+                  {client.nomeCliente}
+                </ListItemText>
+                <FormControl id="delete-client">
+                  <ButtonContainer>
+                    <DeleteButton
+                      type="submit"
+                      onClick={() => deleteClient(client.numeroCliente)}
+                    >
+                      Deletar
+                    </DeleteButton>
 
-                  <EditButton
-                    type="submit"
-                    onClick={() => handleUpdateButtonClick(client)}
-                  >
-                    Editar
-                  </EditButton>
-                </ButtonContainer>
-              </FormControl>
-            </ListItemContainer>
-          ))}
-        </List>
+                    <EditButton
+                      type="submit"
+                      onClick={() => handleUpdateButtonClick(client)}
+                    >
+                      Editar
+                    </EditButton>
+                  </ButtonContainer>
+                </FormControl>
+              </ListItemContainer>
+            ))}
+          </List>
+        </ClientListContainer>
       </BodyContainer>
     </>
   );

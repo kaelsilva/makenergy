@@ -6,6 +6,7 @@ import {
   Toolbar as MToolbar,
   List,
   ListItem as MListItem,
+  Typography,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { shade } from 'polished';
@@ -25,11 +26,13 @@ export const FiMenu = styled(MFiMenu)`
 
 export const Toolbar = styled(MToolbar)`
   && {
-    background-color: #fff;
+    background-color: #fafafa;
     width: 100vw;
     align-items: center;
     position: fixed;
     z-index: 1;
+    margin-top: -20px;
+    padding: 0;
   }
 `;
 
@@ -72,24 +75,38 @@ export const LinkList = styled(List)`
   margin-top: 10px;
 `;
 
-export const ListItem = styled(MListItem)`
+export const ListItem = styled(Link)`
   display: flex;
   flex: 1;
+  align-items: center;
+  padding-left: 10px;
+
   cursor: pointer;
 
   height: 50px;
   max-height: 50px;
 
+  margin-left: 10px;
+
+  text-decoration: none;
+
+  color: #d6df27;
+
   &:hover {
     width: 100%;
     background-color: ${shade(0.1, '#fff')};
   }
+
+  &:active {
+    color: #1ba2a1;
+  }
 `;
 
-export const ItemLink = styled(Link)`
-  text-decoration: none;
-  font-size: 24px;
-  color: #000;
+export const ItemLink = styled(Typography)`
+  && {
+    font-size: 24px;
+    color: #000;
 
-  margin-left: 10px;
+    margin-left: 10px;
+  }
 `;

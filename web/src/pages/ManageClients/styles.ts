@@ -7,6 +7,7 @@ import {
   Typography,
   FormLabel,
 } from '@mui/material';
+import { FiPlus as MFiPlus } from 'react-icons/fi';
 import { shade } from 'polished';
 
 export const Button = styled(MButton)`
@@ -26,10 +27,16 @@ export const ListItemContainer = styled.div`
   max-height: 40px;
   max-width: 70vw;
   width: 60vw;
-  margin: 5px;
+  margin: 5px 5px 5px 30px;
   border-color: #efefef;
   border-width: 2px;
   border-style: solid;
+
+  @media only screen and (max-width: 700px) {
+    margin: 5px 0 0 0;
+    max-width: 80vw;
+    width: 80vw;
+  }
 `;
 
 export const ListItemText = styled(MListItemText)`
@@ -55,6 +62,20 @@ export const CreateButton = styled(MButton)`
     color: #fff;
     border-radius: 5px;
 
+    &:hover {
+      background-color: ${shade(0.2, '#4bb543')};
+    }
+  }
+`;
+
+export const NewClientButton = styled(MButton)`
+  && {
+    background-color: #4bb543;
+    color: #fff;
+    border-radius: 5px;
+    margin-left: 30px;
+
+    max-width: 200px;
     &:hover {
       background-color: ${shade(0.2, '#4bb543')};
     }
@@ -199,4 +220,23 @@ export const BodyContainer = styled.body`
   height: 100vh;
 
   margin-top: 18px;
+
+  @media only screen and (max-width: 700px) {
+    justify-content: center;
+  }
+`;
+
+export const ClientListContainer = styled.section`
+  display: flex;
+  flex: 1;
+  margin-top: 70px;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+`;
+
+export const FiPlusStyled = styled(MFiPlus)`
+  width: 28px;
+  color: #fff;
 `;

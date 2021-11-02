@@ -7,17 +7,17 @@ const Sidebar: React.FC = () => {
     <>
       <Container>
         <LinkList>
-          <ListItem>
+          <ListItem to="/">
             <FiHome size="24px" />
-            <ItemLink to="/">Clientes</ItemLink>
+            <ItemLink>Clientes</ItemLink>
           </ListItem>
-          <ListItem>
+          <ListItem to="/chart">
             <FiActivity size="24px" />
-            <ItemLink to="/chart">Gráfico</ItemLink>
+            <ItemLink>Gráfico</ItemLink>
           </ListItem>
-          <ListItem>
+          <ListItem to="/">
             <FiLogOut size="24px" />
-            <ItemLink to="/">Logout</ItemLink>
+            <ItemLink>Logout</ItemLink>
           </ListItem>
         </LinkList>
       </Container>

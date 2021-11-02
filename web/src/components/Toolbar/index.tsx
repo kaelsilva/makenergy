@@ -10,17 +10,17 @@ const Toolbar: React.FC = () => {
       {menuClicked && (
         <S.MobileContainer>
           <S.LinkList>
-            <S.ListItem>
+            <S.ListItem to="/">
               <FiHome size="24px" />
-              <S.ItemLink to="/">Clientes</S.ItemLink>
+              <S.ItemLink>Clientes</S.ItemLink>
             </S.ListItem>
-            <S.ListItem>
+            <S.ListItem to="/chart">
               <FiActivity size="24px" />
-              <S.ItemLink to="/chart">Gráfico</S.ItemLink>
+              <S.ItemLink>Gráfico</S.ItemLink>
             </S.ListItem>
-            <S.ListItem>
+            <S.ListItem to="/">
               <FiLogOut size="24px" />
-              <S.ItemLink to="/">Logout</S.ItemLink>
+              <S.ItemLink>Logout</S.ItemLink>
             </S.ListItem>
           </S.LinkList>
         </S.MobileContainer>
