@@ -1,5 +1,10 @@
-import React, { FormEvent, useEffect, useState } from 'react';
-import { FormControl, Select, MenuItem } from '@mui/material';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import {
+  FormControl,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from '@mui/material';
 import { FiPlus } from 'react-icons/fi';
 import Toolbar from '../../components/Toolbar';
 import {
@@ -16,6 +21,8 @@ import {
   NewButton,
   ListItemContainer,
   ButtonContainer,
+  LabelAndInputContainer,
+  Label,
 } from './styles';
 import dadosClientes from '../../assets/JSON_data/dadosClientes.json';
 import logo from '../../assets/images/logo-Sharenergy-01.png';
@@ -121,6 +128,76 @@ const ManageClients: React.FC = () => {
     setClientEditForm(client);
   };
 
+  const handleUpdateSelectPowerPlant = (event: SelectChangeEvent) => {
+    setCreateUserForm({
+      ...createUserForm,
+      usinas: [
+        {
+          usinaId: Number(event.target.value),
+          percentualDeParticipacao: 0,
+        },
+      ],
+    });
+  };
+
+  const handleUpdateParticipationInput = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setCreateUserForm({
+      ...createUserForm,
+      usinas: [
+        {
+          usinaId: createUserForm.usinas[0].usinaId,
+          percentualDeParticipacao: Number(event.currentTarget.value),
+        },
+      ],
+    });
+  };
+
+  const handleUpdatePowerPlantOnAlter = (
+    event: SelectChangeEvent,
+    usinaId: number
+  ) => {
+    const powerPlantIndex = clientEditForm.usinas.findIndex(
+      (item) => item.usinaId === usinaId
+    );
+
+    const powerPlantList = clientEditForm.usinas;
+
+    const powerPlant = powerPlantList[powerPlantIndex];
+
+    if (powerPlant !== undefined) {
+      powerPlant.usinaId = Number(event.target.value);
+      powerPlantList[powerPlantIndex] = powerPlant;
+      setClientEditForm({
+        ...clientEditForm,
+        usinas: powerPlantList,
+      });
+    }
+  };
+
+  const handleUpdatePowerPlantParticipationOnAlter = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    usinaId: number
+  ) => {
+    const powerPlantIndex = clientEditForm.usinas.findIndex(
+      (item) => item.usinaId === usinaId
+    );
+
+    const powerPlantList = clientEditForm.usinas;
+
+    const powerPlant = powerPlantList[powerPlantIndex];
+
+    if (powerPlant !== undefined) {
+      powerPlant.percentualDeParticipacao = Number(event.target.value);
+      powerPlantList[powerPlantIndex] = powerPlant;
+      setClientEditForm({
+        ...clientEditForm,
+        usinas: powerPlantList,
+      });
+    }
+  };
+
   return (
     <>
       <Toolbar />
@@ -130,54 +207,41 @@ const ManageClients: React.FC = () => {
       {creationBox && (
         <CreationContainer onSubmit={(event) => handleForm(event)}>
           <H1>Novo cliente</H1>
-          <InputText
-            type="text"
-            placeholder="Nome"
-            onChange={(e) =>
-              setCreateUserForm({
-                ...createUserForm,
-                nomeCliente: e.currentTarget.value,
-              })
-            }
-          />
-          <Select
-            labelId="select-power-plant"
-            id="power-plant-select"
-            label="variable"
-            defaultValue="1"
-            onChange={(e) =>
-              setCreateUserForm({
-                ...createUserForm,
-                usinas: [
-                  {
-                    usinaId: Number(e.target.value),
-                    percentualDeParticipacao: 0,
-                  },
-                ],
-              })
-            }
-          >
-            {powerPlants.map((powerPlant) => (
-              <MenuItem value={powerPlant.id.toString()}>
-                {powerPlant.id}
-              </MenuItem>
-            ))}
-          </Select>
-          <InputText
-            type="text"
-            placeholder="% de participação na usina (apenas números)"
-            onChange={(e) => {
-              setCreateUserForm({
-                ...createUserForm,
-                usinas: [
-                  {
-                    usinaId: Number(e.currentTarget.value),
-                    percentualDeParticipacao: Number(e.currentTarget.value),
-                  },
-                ],
-              });
-            }}
-          />
+          <FormControl variant="standard">
+            <InputText
+              type="text"
+              placeholder="Nome"
+              onChange={(e) =>
+                setCreateUserForm({
+                  ...createUserForm,
+                  nomeCliente: e.currentTarget.value,
+                })
+              }
+            />
+          </FormControl>
+
+          <FormControl variant="standard">
+            <Select
+              labelId="select-power-plant"
+              id="power-plant-select"
+              label="variable"
+              onChange={handleUpdateSelectPowerPlant}
+            >
+              {powerPlants.map((powerPlant) => (
+                <MenuItem value={powerPlant.id.toString()}>
+                  {powerPlant.id}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl variant="standard">
+            <InputText
+              type="text"
+              placeholder="% de participação na usina (apenas números)"
+              onChange={handleUpdateParticipationInput}
+            />
+          </FormControl>
 
           <CreateButton type="submit">Confirmar criação</CreateButton>
           <CancelButton onClick={() => setCreationBox(false)}>
@@ -190,59 +254,58 @@ const ManageClients: React.FC = () => {
         <EditContainer onSubmit={(event) => handleEditForm(event)}>
           <H1>Editar cliente</H1>
 
-          <InputText
-            type="text"
-            placeholder="Nome"
-            value={clientEditForm.nomeCliente}
-            onChange={(e) =>
-              setClientEditForm({
-                ...clientEditForm,
-                nomeCliente: e.currentTarget.value,
-              })
-            }
-          />
-          <Select
-            labelId="select-power-plant"
-            id="power-plant-select"
-            label="variable"
-            defaultValue="1"
-            onChange={(e) =>
-              setClientEditForm({
-                ...clientEditForm,
-              })
-            }
-          >
-            {powerPlants.map((powerPlant) => (
-              <MenuItem value={powerPlant.id.toString()}>
-                {powerPlant.id}
-              </MenuItem>
-            ))}
-          </Select>
+          <FormControl variant="standard">
+            <LabelAndInputContainer>
+              <Label>Nome:</Label>
+              <InputText
+                type="text"
+                placeholder="Nome"
+                value={clientEditForm.nomeCliente}
+                onChange={(e) =>
+                  setClientEditForm({
+                    ...clientEditForm,
+                    nomeCliente: e.currentTarget.value,
+                  })
+                }
+              />
+            </LabelAndInputContainer>
+          </FormControl>
 
           {clientEditForm.usinas.map((powerPlant) => (
-            <>
-              <div>{`Participação na Usina ${powerPlant.usinaId} (em %):`}</div>
+            <LabelAndInputContainer>
+              <Label>Usina:</Label>
+              <Select
+                labelId="select-power-plant"
+                id="power-plant-select"
+                label="variable"
+                defaultValue={powerPlant.usinaId.toString()}
+                onChange={(event: SelectChangeEvent) =>
+                  handleUpdatePowerPlantOnAlter(event, powerPlant.usinaId)
+                }
+              >
+                {powerPlants.map((pp) => (
+                  <MenuItem value={pp.id.toString()}>{pp.id}</MenuItem>
+                ))}
+              </Select>
+
+              {/* <div>{`Participação na Usina ${powerPlant.usinaId} (em %):`}</div> */}
+              <Label>Participação (%):</Label>
               <InputText
+                id="Percent"
                 type="text"
                 value={powerPlant.percentualDeParticipacao.toString()}
                 placeholder="% de participação na usina (apenas números)"
-                onChange={(e) => {
-                  setClientEditForm({
-                    ...clientEditForm,
-                    usinas: [
-                      {
-                        ...clientEditForm.usinas,
-                        usinaId: powerPlant.usinaId,
-                        percentualDeParticipacao: Number(e.currentTarget.value),
-                      },
-                    ],
-                  });
-                }}
+                onChange={(event) =>
+                  handleUpdatePowerPlantParticipationOnAlter(
+                    event,
+                    powerPlant.usinaId
+                  )
+                }
               />
-            </>
+            </LabelAndInputContainer>
           ))}
 
-          {/* <NewButton
+          <NewButton
             onClick={() =>
               setClientEditForm({
                 ...clientEditForm,
@@ -257,7 +320,7 @@ const ManageClients: React.FC = () => {
             }
           >
             <FiPlus size="25px" />
-          </NewButton> */}
+          </NewButton>
 
           <EditButton type="submit">Confirmar edição</EditButton>
           <CancelButton onClick={() => setEditBox(false)}>
