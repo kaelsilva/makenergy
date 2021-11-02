@@ -23,7 +23,9 @@ import {
   ButtonContainer,
   LabelAndInputContainer,
   Label,
+  BodyContainer,
 } from './styles';
+import Sidebar from '../../components/Sidebar';
 import dadosClientes from '../../assets/JSON_data/dadosClientes.json';
 
 interface IPowerPlantParticipation {
@@ -190,144 +192,147 @@ const ManageClients: React.FC = () => {
       <Toolbar />
 
       <CreateButton onClick={() => setCreationBox(true)}>Criar</CreateButton>
+      <BodyContainer>
+        <Sidebar />
 
-      {creationBox && (
-        <CreationContainer onSubmit={(event) => handleForm(event)}>
-          <H1>Novo cliente</H1>
-          <FormControl variant="standard">
-            <LabelAndInputContainer>
-              <Label>Nome:</Label>
-              <InputText
-                type="text"
-                placeholder="Nome"
-                onChange={(e) =>
-                  setCreateUserForm({
-                    ...createUserForm,
-                    nomeCliente: e.currentTarget.value,
-                  })
-                }
-              />
-            </LabelAndInputContainer>
-          </FormControl>
-
-          <CreateButton type="submit">Confirmar criação</CreateButton>
-          <CancelButton onClick={() => setCreationBox(false)}>
-            Cancelar
-          </CancelButton>
-        </CreationContainer>
-      )}
-
-      {editBox && (
-        <EditContainer onSubmit={(event) => handleEditForm(event)}>
-          <H1>Editar cliente</H1>
-
-          <FormControl variant="standard">
-            <LabelAndInputContainer>
-              <Label>Nome:</Label>
-              <InputText
-                type="text"
-                placeholder="Nome"
-                value={clientEditForm.nomeCliente}
-                onChange={(e) =>
-                  setClientEditForm({
-                    ...clientEditForm,
-                    nomeCliente: e.currentTarget.value,
-                  })
-                }
-              />
-            </LabelAndInputContainer>
-          </FormControl>
-
-          {clientEditForm.usinas.map((powerPlant) => (
-            <LabelAndInputContainer>
-              <Label>Usina:</Label>
-              <Select
-                labelId="select-power-plant"
-                id="power-plant-select"
-                label="variable"
-                value={powerPlant.usinaId.toString()}
-                onChange={(event: SelectChangeEvent) =>
-                  handleUpdatePowerPlantOnAlter(event, powerPlant.usinaId)
-                }
-              >
-                {powerPlants.map((pp) => (
-                  <MenuItem value={pp.id.toString()}>{pp.id}</MenuItem>
-                ))}
-              </Select>
-
-              <Label>Participação (%):</Label>
-              <InputText
-                id="Percent"
-                type="text"
-                value={powerPlant.percentualDeParticipacao.toString()}
-                placeholder="% de participação na usina (apenas números)"
-                onChange={(event) =>
-                  handleUpdatePowerPlantParticipationOnAlter(
-                    event,
-                    powerPlant.usinaId
-                  )
-                }
-              />
-              <FiDelete
-                size="28px"
-                onClick={() =>
-                  handleDeletePowerPlantFromClient(powerPlant.usinaId)
-                }
-                style={{ color: 'red', cursor: 'pointer' }}
-              />
-            </LabelAndInputContainer>
-          ))}
-
-          <NewButton
-            onClick={() =>
-              setClientEditForm({
-                ...clientEditForm,
-                usinas: [
-                  ...clientEditForm.usinas,
-                  {
-                    usinaId: 0,
-                    percentualDeParticipacao: 0,
-                  },
-                ],
-              })
-            }
-          >
-            <FiPlus size="25px" />
-          </NewButton>
-
-          <EditButton type="submit">Confirmar edição</EditButton>
-          <CancelButton onClick={() => setEditBox(false)}>
-            Cancelar
-          </CancelButton>
-        </EditContainer>
-      )}
-
-      <List>
-        {clients.map((client) => (
-          <ListItemContainer>
-            <ListItemText id={client.numeroCliente.toString()}>
-              {client.nomeCliente}
-            </ListItemText>
-            <FormControl id="delete-client">
-              <ButtonContainer>
-                <DeleteButton
-                  type="submit"
-                  onClick={() => deleteClient(client.numeroCliente)}
-                >
-                  Deletar
-                </DeleteButton>
-
-                <EditButton
-                  type="submit"
-                  onClick={() => handleUpdateButtonClick(client)}
-                >
-                  Editar
-                </EditButton>
-              </ButtonContainer>
+        {creationBox && (
+          <CreationContainer onSubmit={(event) => handleForm(event)}>
+            <H1>Novo cliente</H1>
+            <FormControl variant="standard">
+              <LabelAndInputContainer>
+                <Label>Nome:</Label>
+                <InputText
+                  type="text"
+                  placeholder="Nome"
+                  onChange={(e) =>
+                    setCreateUserForm({
+                      ...createUserForm,
+                      nomeCliente: e.currentTarget.value,
+                    })
+                  }
+                />
+              </LabelAndInputContainer>
             </FormControl>
-          </ListItemContainer>
-        ))}
-      </List>
+
+            <CreateButton type="submit">Confirmar criação</CreateButton>
+            <CancelButton onClick={() => setCreationBox(false)}>
+              Cancelar
+            </CancelButton>
+          </CreationContainer>
+        )}
+
+        {editBox && (
+          <EditContainer onSubmit={(event) => handleEditForm(event)}>
+            <H1>Editar cliente</H1>
+
+            <FormControl variant="standard">
+              <LabelAndInputContainer>
+                <Label>Nome:</Label>
+                <InputText
+                  type="text"
+                  placeholder="Nome"
+                  value={clientEditForm.nomeCliente}
+                  onChange={(e) =>
+                    setClientEditForm({
+                      ...clientEditForm,
+                      nomeCliente: e.currentTarget.value,
+                    })
+                  }
+                />
+              </LabelAndInputContainer>
+            </FormControl>
+
+            {clientEditForm.usinas.map((powerPlant) => (
+              <LabelAndInputContainer>
+                <Label>Usina:</Label>
+                <Select
+                  labelId="select-power-plant"
+                  id="power-plant-select"
+                  label="variable"
+                  value={powerPlant.usinaId.toString()}
+                  onChange={(event: SelectChangeEvent) =>
+                    handleUpdatePowerPlantOnAlter(event, powerPlant.usinaId)
+                  }
+                >
+                  {powerPlants.map((pp) => (
+                    <MenuItem value={pp.id.toString()}>{pp.id}</MenuItem>
+                  ))}
+                </Select>
+
+                <Label>Participação (%):</Label>
+                <InputText
+                  id="Percent"
+                  type="text"
+                  value={powerPlant.percentualDeParticipacao.toString()}
+                  placeholder="% de participação na usina (apenas números)"
+                  onChange={(event) =>
+                    handleUpdatePowerPlantParticipationOnAlter(
+                      event,
+                      powerPlant.usinaId
+                    )
+                  }
+                />
+                <FiDelete
+                  size="28px"
+                  onClick={() =>
+                    handleDeletePowerPlantFromClient(powerPlant.usinaId)
+                  }
+                  style={{ color: 'red', cursor: 'pointer' }}
+                />
+              </LabelAndInputContainer>
+            ))}
+
+            <NewButton
+              onClick={() =>
+                setClientEditForm({
+                  ...clientEditForm,
+                  usinas: [
+                    ...clientEditForm.usinas,
+                    {
+                      usinaId: 0,
+                      percentualDeParticipacao: 0,
+                    },
+                  ],
+                })
+              }
+            >
+              <FiPlus size="25px" />
+            </NewButton>
+
+            <EditButton type="submit">Confirmar edição</EditButton>
+            <CancelButton onClick={() => setEditBox(false)}>
+              Cancelar
+            </CancelButton>
+          </EditContainer>
+        )}
+
+        <List>
+          {clients.map((client) => (
+            <ListItemContainer>
+              <ListItemText id={client.numeroCliente.toString()}>
+                {client.nomeCliente}
+              </ListItemText>
+              <FormControl id="delete-client">
+                <ButtonContainer>
+                  <DeleteButton
+                    type="submit"
+                    onClick={() => deleteClient(client.numeroCliente)}
+                  >
+                    Deletar
+                  </DeleteButton>
+
+                  <EditButton
+                    type="submit"
+                    onClick={() => handleUpdateButtonClick(client)}
+                  >
+                    Editar
+                  </EditButton>
+                </ButtonContainer>
+              </FormControl>
+            </ListItemContainer>
+          ))}
+        </List>
+      </BodyContainer>
     </>
   );
 };

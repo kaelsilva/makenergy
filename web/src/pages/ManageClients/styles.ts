@@ -22,7 +22,11 @@ export const List = styled(MList)`
 export const ListItemContainer = styled.div`
   display: flex;
   flex: 1;
-  height: 50px;
+  align-items: center;
+  max-height: 40px;
+  max-width: 70vw;
+  width: 60vw;
+  margin: 5px;
   border-color: #efefef;
   border-width: 2px;
   border-style: solid;
@@ -184,4 +188,13 @@ export const Label = styled(FormLabel)`
     font-size: 16px;
     font-weight: 600;
   }
+`;
+
+export const BodyContainer = styled.body`
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex: 1;
+  width: 100vw;
+  height: 100vh;
 `;
