@@ -1,13 +1,12 @@
 import React from 'react';
-import Chart from './pages/Chart';
-import ManageClients from './pages/ManageClients';
+import { BrowserRouter } from 'react-router-dom';
+import Routes from './routes';
 
 const App: React.FC = () => {
   return (
-    <>
-      {/* <Chart /> */}
-      <ManageClients />
-    </>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <Routes />
+    </BrowserRouter>
   );
 };
 
