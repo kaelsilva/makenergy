@@ -1,12 +1,11 @@
 import styled from 'styled-components';
 import {
   Button as MButton,
-  Toolbar as MToolbar,
   List as MList,
   ListItemText as MListItemText,
-  FormControl,
   Input,
   Typography,
+  FormLabel,
 } from '@mui/material';
 import { shade } from 'polished';
 
@@ -162,4 +161,27 @@ export const CreationContainerHeader = styled.div`
 
 export const InputText = styled(Input)`
   padding: 20px;
+  max-height: 30px;
+
+  #Percent {
+    width: 30px;
+    max-width: 30px;
+  }
+`;
+
+export const LabelAndInputContainer = styled.div`
+  display: flex;
+  flex: 1;
+  padding: 10px;
+  margin: 10px;
+  max-height: 50px;
+  justify-content: space-evenly;
+  align-items: center;
+`;
+
+export const Label = styled(FormLabel)`
+  && {
+    font-size: 16px;
+    font-weight: 600;
+  }
 `;
