@@ -211,11 +211,11 @@ export const Label = styled(FormLabel)`
   }
 `;
 
-export const BodyContainer = styled.body`
+export const BodyContainer = styled.div`
   display: flex;
   flex: 1;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 
   @media only screen and (max-width: 700px) {
     justify-content: center;
@@ -240,12 +240,12 @@ export const FiPlusStyled = styled(MFiPlus)`
 export const BlurBackground = styled.div`
   display: flex;
   flex: 1;
-  position: absolute;
+  position: fixed;
   align-items: center;
   justify-content: center;
   z-index: 1;
 
   background: rgba(30, 30, 30, 0.8);
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 `;

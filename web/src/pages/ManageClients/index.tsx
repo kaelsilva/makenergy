@@ -141,40 +141,62 @@ const ManageClients: React.FC = () => {
       (item) => item.usinaId === usinaId
     );
 
-    const powerPlantList = clientEditForm.usinas;
+    const currentPowerPlants: IPowerPlantParticipation[] = [
+      ...clientEditForm.usinas,
+    ];
 
-    const powerPlant = powerPlantList[powerPlantIndex];
+    const powerPlant = { ...currentPowerPlants[powerPlantIndex] };
 
-    if (powerPlant !== undefined) {
-      powerPlant.usinaId = Number(event.target.value);
-      powerPlantList[powerPlantIndex] = powerPlant;
-      setClientEditForm({
-        ...clientEditForm,
-        usinas: powerPlantList,
-      });
-    }
+    powerPlant.usinaId = Number(event.target.value);
+    currentPowerPlants[powerPlantIndex] = powerPlant;
+    setClientEditForm({
+      ...clientEditForm,
+      usinas: currentPowerPlants,
+    });
   };
 
   const handleUpdatePowerPlantParticipationOnAlter = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     usinaId: number
-  ) => {
+  ): null => {
+    const participationValue = Number(event.target.value);
+    let maximumParticipationValue = 100;
+
+    clients.forEach((client) => {
+      if (client.numeroCliente !== clientEditForm.numeroCliente) {
+        client.usinas.forEach((powerPlant) => {
+          if (powerPlant.usinaId === usinaId) {
+            maximumParticipationValue -= powerPlant.percentualDeParticipacao;
+          }
+        });
+      }
+    });
+
+    if (
+      Number.isNaN(participationValue) ||
+      participationValue > maximumParticipationValue ||
+      participationValue < 0
+    ) {
+      return null;
+    }
+
     const powerPlantIndex = clientEditForm.usinas.findIndex(
       (item) => item.usinaId === usinaId
     );
 
-    const powerPlantList = clientEditForm.usinas;
+    const currentPowerPlants: IPowerPlantParticipation[] = [
+      ...clientEditForm.usinas,
+    ];
 
-    const powerPlant = powerPlantList[powerPlantIndex];
+    const powerPlant = { ...currentPowerPlants[powerPlantIndex] };
 
-    if (powerPlant !== undefined) {
-      powerPlant.percentualDeParticipacao = Number(event.target.value);
-      powerPlantList[powerPlantIndex] = powerPlant;
-      setClientEditForm({
-        ...clientEditForm,
-        usinas: powerPlantList,
-      });
-    }
+    powerPlant.percentualDeParticipacao = participationValue;
+    currentPowerPlants[powerPlantIndex] = powerPlant;
+    setClientEditForm({
+      ...clientEditForm,
+      usinas: currentPowerPlants,
+    });
+    return null;
   };
 
   const handleAddNewPowerPlantToClient = () => {
@@ -271,7 +293,7 @@ const ManageClients: React.FC = () => {
               </FormControl>
 
               {clientEditForm.usinas.map((powerPlant) => (
-                <LabelAndInputContainer>
+                <LabelAndInputContainer key={powerPlant.usinaId}>
                   <Label>Usina:</Label>
                   <Select
                     labelId="select-power-plant"
@@ -283,7 +305,9 @@ const ManageClients: React.FC = () => {
                     }
                   >
                     {powerPlants.map((pp) => (
-                      <MenuItem value={pp.id.toString()}>{pp.id}</MenuItem>
+                      <MenuItem value={pp.id.toString()} key={pp.id}>
+                        {pp.id}
+                      </MenuItem>
                     ))}
                   </Select>
 
@@ -327,7 +351,7 @@ const ManageClients: React.FC = () => {
           </NewClientButton>
           <List>
             {clients.map((client) => (
-              <ListItemContainer>
+              <ListItemContainer key={client.numeroCliente}>
                 <ListItemText id={client.numeroCliente.toString()}>
                   {client.nomeCliente}
                 </ListItemText>
