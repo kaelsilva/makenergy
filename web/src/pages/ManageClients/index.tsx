@@ -27,6 +27,7 @@ import {
   ClientListContainer,
   FiPlusStyled,
   NewClientButton,
+  BlurBackground,
 } from './styles';
 import Sidebar from '../../components/Sidebar';
 import dadosClientes from '../../assets/JSON_data/dadosClientes.json';
@@ -220,99 +221,103 @@ const ManageClients: React.FC = () => {
         <Sidebar />
 
         {creationBox && (
-          <CreationContainer onSubmit={(event) => handleForm(event)}>
-            <H1>Novo cliente</H1>
-            <FormControl variant="standard">
-              <LabelAndInputContainer>
-                <Label>Nome:</Label>
-                <InputText
-                  type="text"
-                  placeholder="Nome"
-                  onChange={(e) =>
-                    setCreateUserForm({
-                      ...createUserForm,
-                      nomeCliente: e.currentTarget.value,
-                    })
-                  }
-                />
-              </LabelAndInputContainer>
-            </FormControl>
+          <BlurBackground>
+            <CreationContainer onSubmit={(event) => handleForm(event)}>
+              <H1>Novo cliente</H1>
+              <FormControl variant="standard">
+                <LabelAndInputContainer>
+                  <Label>Nome:</Label>
+                  <InputText
+                    type="text"
+                    placeholder="Nome"
+                    onChange={(e) =>
+                      setCreateUserForm({
+                        ...createUserForm,
+                        nomeCliente: e.currentTarget.value,
+                      })
+                    }
+                  />
+                </LabelAndInputContainer>
+              </FormControl>
 
-            <CreateButton type="submit">Confirmar criação</CreateButton>
-            <CancelButton onClick={() => setCreationBox(false)}>
-              Cancelar
-            </CancelButton>
-          </CreationContainer>
+              <CreateButton type="submit">Confirmar criação</CreateButton>
+              <CancelButton onClick={() => setCreationBox(false)}>
+                Cancelar
+              </CancelButton>
+            </CreationContainer>
+          </BlurBackground>
         )}
 
         {editBox && (
-          <EditContainer onSubmit={(event) => handleEditForm(event)}>
-            <H1>Editar cliente</H1>
+          <BlurBackground>
+            <EditContainer onSubmit={(event) => handleEditForm(event)}>
+              <H1>Editar cliente</H1>
 
-            <FormControl variant="standard">
-              <LabelAndInputContainer>
-                <Label>Nome:</Label>
-                <InputText
-                  type="text"
-                  placeholder="Nome"
-                  value={clientEditForm.nomeCliente}
-                  onChange={(e) =>
-                    setClientEditForm({
-                      ...clientEditForm,
-                      nomeCliente: e.currentTarget.value,
-                    })
-                  }
-                />
-              </LabelAndInputContainer>
-            </FormControl>
+              <FormControl variant="standard">
+                <LabelAndInputContainer>
+                  <Label>Nome:</Label>
+                  <InputText
+                    type="text"
+                    placeholder="Nome"
+                    value={clientEditForm.nomeCliente}
+                    onChange={(e) =>
+                      setClientEditForm({
+                        ...clientEditForm,
+                        nomeCliente: e.currentTarget.value,
+                      })
+                    }
+                  />
+                </LabelAndInputContainer>
+              </FormControl>
 
-            {clientEditForm.usinas.map((powerPlant) => (
-              <LabelAndInputContainer>
-                <Label>Usina:</Label>
-                <Select
-                  labelId="select-power-plant"
-                  id="power-plant-select"
-                  label="variable"
-                  value={powerPlant.usinaId.toString()}
-                  onChange={(event: SelectChangeEvent) =>
-                    handleUpdatePowerPlantOnAlter(event, powerPlant.usinaId)
-                  }
-                >
-                  {powerPlants.map((pp) => (
-                    <MenuItem value={pp.id.toString()}>{pp.id}</MenuItem>
-                  ))}
-                </Select>
+              {clientEditForm.usinas.map((powerPlant) => (
+                <LabelAndInputContainer>
+                  <Label>Usina:</Label>
+                  <Select
+                    labelId="select-power-plant"
+                    id="power-plant-select"
+                    label="variable"
+                    value={powerPlant.usinaId.toString()}
+                    onChange={(event: SelectChangeEvent) =>
+                      handleUpdatePowerPlantOnAlter(event, powerPlant.usinaId)
+                    }
+                  >
+                    {powerPlants.map((pp) => (
+                      <MenuItem value={pp.id.toString()}>{pp.id}</MenuItem>
+                    ))}
+                  </Select>
 
-                <Label>Participação (%):</Label>
-                <InputText
-                  id="Percent"
-                  type="text"
-                  value={powerPlant.percentualDeParticipacao.toString()}
-                  placeholder="% de participação na usina (apenas números)"
-                  onChange={(event) =>
-                    handleUpdatePowerPlantParticipationOnAlter(
-                      event,
-                      powerPlant.usinaId
-                    )
-                  }
-                />
-                <FiDelete
-                  size="28px"
-                  onClick={() =>
-                    handleDeletePowerPlantFromClient(powerPlant.usinaId)
-                  }
-                  style={{ color: 'red', cursor: 'pointer' }}
-                />
-              </LabelAndInputContainer>
-            ))}
+                  <Label>Participação (%):</Label>
+                  <InputText
+                    id="Percent"
+                    type="text"
+                    value={powerPlant.percentualDeParticipacao.toString()}
+                    placeholder="% de participação na usina (apenas números)"
+                    onChange={(event) =>
+                      handleUpdatePowerPlantParticipationOnAlter(
+                        event,
+                        powerPlant.usinaId
+                      )
+                    }
+                  />
+                  <FiDelete
+                    size="28px"
+                    onClick={() =>
+                      handleDeletePowerPlantFromClient(powerPlant.usinaId)
+                    }
+                    style={{ color: 'red', cursor: 'pointer' }}
+                  />
+                </LabelAndInputContainer>
+              ))}
 
-            <NewButton onClick={handleAddNewPowerPlantToClient}>
-              <FiPlus size="25px" />
-            </NewButton>
+              <NewButton onClick={handleAddNewPowerPlantToClient}>
+                <FiPlus size="25px" />
+              </NewButton>
 
-            <EditButton type="submit">Confirmar edição</EditButton>
-            <CancelButton onClick={handleEditCancel}>Cancelar</CancelButton>
-          </EditContainer>
+              <EditButton type="submit">Confirmar edição</EditButton>
+              <CancelButton onClick={handleEditCancel}>Cancelar</CancelButton>
+            </EditContainer>
+          </BlurBackground>
         )}
 
         <ClientListContainer>

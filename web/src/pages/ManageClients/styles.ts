@@ -133,7 +133,7 @@ export const CreationContainer = styled.form`
   && {
     background-color: #fff;
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     top: 100px;
     display: flex;
     flex-direction: column;
@@ -235,4 +235,17 @@ export const ClientListContainer = styled.section`
 export const FiPlusStyled = styled(MFiPlus)`
   width: 28px;
   color: #fff;
+`;
+
+export const BlurBackground = styled.div`
+  display: flex;
+  flex: 1;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+
+  background: rgba(30, 30, 30, 0.8);
+  width: 100vw;
+  height: 100vh;
 `;
