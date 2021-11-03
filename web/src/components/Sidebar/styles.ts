@@ -12,6 +12,12 @@ export const Container = styled.nav`
 
   margin-top: 70px;
 
+  @media only screen and (max-width: 1130px) {
+    display: block;
+    visibility: hidden;
+    height: 0;
+  }
+
   @media only screen and (max-width: 700px) {
     display: block;
     visibility: hidden;

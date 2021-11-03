@@ -33,7 +33,7 @@ export const ListItemContainer = styled.div`
   border-style: solid;
 
   @media only screen and (max-width: 700px) {
-    margin: 5px 0 0 0;
+    margin: 5px 0 0 30px;
     max-width: 80vw;
     width: 80vw;
   }
@@ -212,14 +212,10 @@ export const Label = styled(FormLabel)`
 `;
 
 export const BodyContainer = styled.body`
-  margin: 0;
-  padding: 0;
   display: flex;
   flex: 1;
   width: 100vw;
   height: 100vh;
-
-  margin-top: 18px;
 
   @media only screen and (max-width: 700px) {
     justify-content: center;

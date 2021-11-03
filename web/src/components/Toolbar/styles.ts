@@ -18,7 +18,7 @@ export const FiMenu = styled(MFiMenu)`
     width: 48px;
     color: #000;
     visibility: hidden;
-    @media only screen and (max-width: 700px) {
+    @media only screen and (max-width: 1130px) {
       visibility: visible;
     }
   }
@@ -31,7 +31,6 @@ export const Toolbar = styled(MToolbar)`
     align-items: center;
     position: fixed;
     z-index: 1;
-    margin-top: -20px;
     padding: 0;
   }
 `;
@@ -56,14 +55,14 @@ export const MobileContainer = styled.nav`
   display: flex;
   width: 100vw;
   height: 100vh;
-  margin-top: 40px;
+  margin-top: 50px;
 
   animation: ${AppearFromLeft} 0.5s;
 
   background-color: #fff;
 
   position: fixed;
-  z-index: 1;
+  z-index: 2;
 `;
 
 export const LinkList = styled(List)`
