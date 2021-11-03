@@ -176,18 +176,41 @@ const ManageClients: React.FC = () => {
     }
   };
 
-  const handleDeletePowerPlantFromClient = (usinaId: number): undefined => {
+  const handleAddNewPowerPlantToClient = () => {
+    setClientEditForm({
+      ...clientEditForm,
+      usinas: [
+        ...clientEditForm.usinas,
+        {
+          usinaId: 0,
+          percentualDeParticipacao: 0,
+        },
+      ],
+    });
+  };
+
+  const handleDeletePowerPlantFromClient = (usinaId: number): void => {
     const powerPlantIndex = clientEditForm.usinas.findIndex(
       (item) => item.usinaId === usinaId
     );
 
-    const currentPowerPlants = clientEditForm.usinas;
+    const currentPowerPlants: IPowerPlantParticipation[] = [
+      ...clientEditForm.usinas,
+    ];
 
     currentPowerPlants.splice(powerPlantIndex, 1);
-
     setClientEditForm({ ...clientEditForm, usinas: currentPowerPlants });
+  };
 
-    return undefined;
+  const handleEditCancel = () => {
+    setEditBox(false);
+
+    const clientIndex = clients.findIndex(
+      (item) => clientEditForm.numeroCliente === item.numeroCliente
+    );
+
+    const clientFound = clients[clientIndex];
+    setClientEditForm(clientFound);
   };
 
   return (
@@ -283,27 +306,12 @@ const ManageClients: React.FC = () => {
               </LabelAndInputContainer>
             ))}
 
-            <NewButton
-              onClick={() =>
-                setClientEditForm({
-                  ...clientEditForm,
-                  usinas: [
-                    ...clientEditForm.usinas,
-                    {
-                      usinaId: 0,
-                      percentualDeParticipacao: 0,
-                    },
-                  ],
-                })
-              }
-            >
+            <NewButton onClick={handleAddNewPowerPlantToClient}>
               <FiPlus size="25px" />
             </NewButton>
 
             <EditButton type="submit">Confirmar edição</EditButton>
-            <CancelButton onClick={() => setEditBox(false)}>
-              Cancelar
-            </CancelButton>
+            <CancelButton onClick={handleEditCancel}>Cancelar</CancelButton>
           </EditContainer>
         )}
 
