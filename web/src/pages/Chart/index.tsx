@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { LineChart, Line, XAxis, YAxis } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import {
   FormControl,
   InputLabel,
@@ -7,7 +7,17 @@ import {
   MenuItem,
   SelectChangeEvent,
 } from '@mui/material';
+import {
+  BodyContainer,
+  DataContainer,
+  DataLineContainer,
+  DataLabel,
+  DataValue,
+  ChartContainer,
+} from './styles';
+import Toolbar from '../../components/Toolbar';
 import dadosUsina from '../../assets/JSON_data/dadosUsina.json';
+import Sidebar from '../../components/Sidebar';
 
 interface IPlotData {
   name?: string;
@@ -260,47 +270,89 @@ const Chart: React.FC = () => {
   };
 
   return (
-    <div>
-      <FormControl>
-        <InputLabel>Variável</InputLabel>
-        <Select
-          labelId="chart-select-label"
-          id="chart-select"
-          label="Variável"
-          defaultValue="potency"
-          onChange={handlePlotVariableChange}
-        >
-          <MenuItem value="current">Corrente</MenuItem>
-          <MenuItem value="potency">Potência</MenuItem>
-          <MenuItem value="temperature">Temperatura</MenuItem>
-          <MenuItem value="tension">Tensão</MenuItem>
-        </Select>
-      </FormControl>
-      <LineChart width={600} height={400} data={data}>
-        <XAxis
-          dataKey="amp"
-          type="number"
-          domain={[(dataMin) => dataMin - 0.5, (dataMax) => dataMax + 0.5]}
-          tickCount={24}
-          interval={1}
-          tickFormatter={formatter}
-        />
-        <YAxis
-          dataKey="uv"
-          type="number"
-          domain={[(dataMin) => dataMin, (dataMax) => dataMax + 0.5]}
-          tickCount={17}
-          interval={1}
-          tickFormatter={formatter}
-        />
-        <Line type="monotone" dataKey="uv" stroke="#8884d8" dot={false} />
-      </LineChart>
-      <div>Retorno financeiro: R$ {calculatePrice()}</div>
-      <div>Média: {`${meanValue} ${meanUnity}`}</div>
-      <div>Desvio padrão: {calculateStandardDeviation()}</div>
-      <div>Mínimo: {`${findMinimumValue()} ${meanUnity}`}</div>
-      <div>Máximo: {`${findMaximumValue()} ${meanUnity}`}</div>
-    </div>
+    <>
+      <Toolbar />
+
+      <BodyContainer>
+        <Sidebar />
+        <FormControl>
+          <InputLabel>Variável</InputLabel>
+          <Select
+            labelId="chart-select-label"
+            id="chart-select"
+            label="Variável"
+            defaultValue="potency"
+            onChange={handlePlotVariableChange}
+            style={{
+              minWidth: '150px',
+              maxWidth: '150px',
+              marginBottom: '10px',
+            }}
+          >
+            <MenuItem value="current">Corrente</MenuItem>
+            <MenuItem value="potency">Potência</MenuItem>
+            <MenuItem value="temperature">Temperatura</MenuItem>
+            <MenuItem value="tension">Tensão</MenuItem>
+          </Select>
+        </FormControl>
+
+        <ChartContainer>
+          <ResponsiveContainer width="100%" height={350}>
+            <LineChart data={data}>
+              <XAxis
+                dataKey="amp"
+                type="number"
+                domain={[
+                  (dataMin) => dataMin - 0.5,
+                  (dataMax) => dataMax + 0.5,
+                ]}
+                tickCount={24}
+                interval={2}
+                unit="h"
+                tickFormatter={formatter}
+              />
+              <YAxis
+                dataKey="uv"
+                type="number"
+                domain={[(dataMin) => dataMin, (dataMax) => dataMax + 0.5]}
+                tickCount={17}
+                interval={1}
+                unit={meanUnity}
+                tickFormatter={formatter}
+              />
+              <Line type="monotone" dataKey="uv" stroke="#8884d8" dot={false} />
+            </LineChart>
+          </ResponsiveContainer>
+        </ChartContainer>
+
+        <DataContainer>
+          <DataLineContainer>
+            <DataLabel>Retorno financeiro:</DataLabel>
+            <DataValue>R$ {calculatePrice()}</DataValue>
+          </DataLineContainer>
+
+          <DataLineContainer>
+            <DataLabel>Média:</DataLabel>
+            <DataValue>{`${meanValue} ${meanUnity}`}</DataValue>
+          </DataLineContainer>
+
+          <DataLineContainer>
+            <DataLabel>Desvio padrão:</DataLabel>
+            <DataValue>{calculateStandardDeviation()}</DataValue>
+          </DataLineContainer>
+
+          <DataLineContainer>
+            <DataLabel>Mínimo:</DataLabel>
+            <DataValue>{`${findMinimumValue()} ${meanUnity}`}</DataValue>
+          </DataLineContainer>
+
+          <DataLineContainer>
+            <DataLabel>Máximo:</DataLabel>
+            <DataValue>{`${findMaximumValue()} ${meanUnity}`}</DataValue>
+          </DataLineContainer>
+        </DataContainer>
+      </BodyContainer>
+    </>
   );
 };
 
