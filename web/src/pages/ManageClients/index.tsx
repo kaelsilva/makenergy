@@ -4,6 +4,7 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
+  InputLabel,
 } from '@mui/material';
 import { FiPlus, FiDelete } from 'react-icons/fi';
 import Toolbar from '../../components/Toolbar';
@@ -65,6 +66,9 @@ const ManageClients: React.FC = () => {
     { id: 2 },
     { id: 3 },
   ]);
+  const [selectablePowerPlants, setSelectablePowerPlants] = useState<
+    IPowerPlant[]
+  >([...powerPlants]);
 
   useEffect(() => {
     let clientData: IClient[] = [];
@@ -200,16 +204,38 @@ const ManageClients: React.FC = () => {
   };
 
   const handleAddNewPowerPlantToClient = () => {
-    setClientEditForm({
-      ...clientEditForm,
-      usinas: [
-        ...clientEditForm.usinas,
-        {
-          usinaId: 0,
-          percentualDeParticipacao: 0,
-        },
-      ],
+    const numPowerPlants = powerPlants.length;
+    const possiblePowerPlants = [...powerPlants];
+    let notFullLength = false;
+    let missingId = 0;
+
+    clientEditForm.usinas.forEach((item) => {
+      possiblePowerPlants.forEach((item2) => {
+        if (
+          item.usinaId !== item2.id &&
+          clientEditForm.usinas.length < numPowerPlants
+        ) {
+          notFullLength = true;
+          missingId = item2.id;
+        }
+      });
     });
+
+    if (
+      (clientEditForm.usinas.length <= numPowerPlants && notFullLength) ||
+      clientEditForm.usinas.length === 0
+    ) {
+      setClientEditForm({
+        ...clientEditForm,
+        usinas: [
+          ...clientEditForm.usinas,
+          {
+            usinaId: missingId,
+            percentualDeParticipacao: 0,
+          },
+        ],
+      });
+    }
   };
 
   const handleDeletePowerPlantFromClient = (usinaId: number): void => {
@@ -234,6 +260,31 @@ const ManageClients: React.FC = () => {
 
     const clientFound = clients[clientIndex];
     setClientEditForm(clientFound);
+  };
+
+  const handleLoadSelect = (usinaId: number) => {
+    const possiblePowerPlants: IPowerPlant[] = [...powerPlants];
+
+    const currentPowerPlants: IPowerPlant[] = [{ id: usinaId }];
+
+    possiblePowerPlants.forEach((item) => {
+      for (let i = 0; i < clientEditForm.usinas.length; i++) {
+        if (
+          item.id !== clientEditForm.usinas[i].usinaId &&
+          item.id !== usinaId
+        ) {
+          if (
+            !currentPowerPlants.some((pp) => pp.id === item.id) &&
+            !clientEditForm.usinas.some((pp) => pp.usinaId === item.id)
+          ) {
+            currentPowerPlants.push({ id: item.id });
+            i = clientEditForm.usinas.length;
+          }
+        }
+      }
+    });
+
+    setSelectablePowerPlants(currentPowerPlants);
   };
 
   return (
@@ -295,21 +346,27 @@ const ManageClients: React.FC = () => {
               {clientEditForm.usinas.map((powerPlant) => (
                 <LabelAndInputContainer key={powerPlant.usinaId}>
                   <Label>Usina:</Label>
-                  <Select
-                    labelId="select-power-plant"
-                    id="power-plant-select"
-                    label="variable"
-                    value={powerPlant.usinaId.toString()}
-                    onChange={(event: SelectChangeEvent) =>
-                      handleUpdatePowerPlantOnAlter(event, powerPlant.usinaId)
-                    }
-                  >
-                    {powerPlants.map((pp) => (
-                      <MenuItem value={pp.id.toString()} key={pp.id}>
-                        {pp.id}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                  <FormControl>
+                    <InputLabel>ID {powerPlant.usinaId}</InputLabel>
+                    <Select
+                      labelId="select-power-plant"
+                      id="power-plant-select"
+                      label="variable"
+                      value={powerPlant.usinaId.toString()}
+                      onMouseMove={() => {
+                        handleLoadSelect(powerPlant.usinaId);
+                      }}
+                      onChange={(event: SelectChangeEvent) =>
+                        handleUpdatePowerPlantOnAlter(event, powerPlant.usinaId)
+                      }
+                    >
+                      {selectablePowerPlants.map((pp) => (
+                        <MenuItem value={pp.id.toString()} key={pp.id}>
+                          {pp.id}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
 
                   <Label>Participação (%):</Label>
                   <InputText
