@@ -15,6 +15,8 @@ export const Background = styled.div`
   width: 100vw;
 
   background: url(${bgImg});
+  background-repeat: no-repeat;
+  background-size: 100%;
 `;
 
 export const Container = styled.div`
