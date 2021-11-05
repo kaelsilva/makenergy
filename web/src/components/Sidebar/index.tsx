@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FiHome, FiActivity, FiLogOut } from 'react-icons/fi';
 import { Container, LinkList, ItemLink, ListItem } from './styles';
+import { useAuth } from '../../hooks/auth';
 
 const Sidebar: React.FC = () => {
+  const { signOut } = useAuth();
   return (
     <>
       <Container>
@@ -15,7 +17,7 @@ const Sidebar: React.FC = () => {
             <FiActivity size="24px" />
             <ItemLink>Gráfico</ItemLink>
           </ListItem>
-          <ListItem to="/">
+          <ListItem onClick={signOut} to="/">
             <FiLogOut size="24px" />
             <ItemLink>Logout</ItemLink>
           </ListItem>

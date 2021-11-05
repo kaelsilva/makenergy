@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { FiHome, FiActivity, FiLogOut } from 'react-icons/fi';
 import * as S from './styles';
 import logo from '../../assets/images/logo-Sharenergy-01.png';
+import { useAuth } from '../../hooks/auth';
 
 const Toolbar: React.FC = () => {
   const [menuClicked, setMenuClicked] = useState<boolean>(false);
+  const { signOut } = useAuth();
+
   return (
     <>
       {menuClicked && (
@@ -18,7 +21,7 @@ const Toolbar: React.FC = () => {
               <FiActivity size="24px" />
               <S.ItemLink>Gráfico</S.ItemLink>
             </S.ListItem>
-            <S.ListItem to="/">
+            <S.ListItem onClick={signOut} to="/">
               <FiLogOut size="24px" />
               <S.ItemLink>Logout</S.ItemLink>
             </S.ListItem>
