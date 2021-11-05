@@ -1,6 +1,15 @@
 import { Typography, Select as MSelect } from '@mui/material';
 import styled from 'styled-components';
 
+export const ContentContainer = styled.div`
+  padding-top: 80px;
+  width: 100%;
+  display: flex;
+  @media only screen and (max-width: 1130px) {
+    flex-direction: column;
+  }
+`;
+
 export const BodyContainer = styled.body`
   margin: 0;
   text-decoration: none;
@@ -8,7 +17,6 @@ export const BodyContainer = styled.body`
   display: flex;
   max-width: 100%;
   flex: 1;
-  padding-top: 80px;
 
   @media only screen and (max-width: 1130px) {
     flex-direction: column;
