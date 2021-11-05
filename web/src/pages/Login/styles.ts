@@ -2,9 +2,20 @@ import styled from 'styled-components';
 import { Typography, Input as MInput, Button as MButton } from '@mui/material';
 import { Link as RLink } from 'react-router-dom';
 import { Form as UForm } from '@unform/web';
-
 import { shade } from 'polished';
+import bgImg from '../../assets/images/usina-solo2.jpg';
 
+export const Background = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+
+  height: 100vh;
+  width: 100vw;
+
+  background: url(${bgImg});
+`;
 export const Container = styled.div`
   display: flex;
   flex: 1;
@@ -14,7 +25,11 @@ export const Container = styled.div`
   height: 100vh;
   width: 100vw;
 
-  background: rgba(40, 40, 40, 0.5);
+  background: linear-gradient(
+    to right,
+    rgb(236, 229, 221) 0%,
+    rgba(0, 162, 162, 0.5)
+  );
 `;
 
 export const LoginContainer = styled.section`
@@ -28,7 +43,7 @@ export const LoginContainer = styled.section`
   height: 600px;
 
   background-color: #fff;
-  border-radius: 5px;
+  border-radius: 10px;
 
   @media only screen and (max-width: 700px) {
     max-width: 90vw;
@@ -40,6 +55,7 @@ export const H1 = styled(Typography)`
   && {
     font-size: 30px;
     margin: 50px;
+    margin-bottom: -10px;
   }
 `;
 
@@ -56,6 +72,9 @@ export const InputLabel = styled(Typography)`
   && {
     font-size: 20px;
     font-weight: 600;
+    display: flex;
+    justify-self: flex-start;
+    width: 50%;
   }
 `;
 
@@ -71,10 +90,10 @@ export const Input = styled(MInput)`
 export const InputContainer = styled.div`
   display: flex;
   flex: 1;
+  width: 330px;
 
   align-self: center;
-  max-height: 40px;
-  padding-top: 30px;
+  max-height: 30px;
   padding-bottom: 40px;
 `;
 
@@ -91,9 +110,13 @@ export const NewSignUp = styled(Typography)`
 `;
 
 export const Link = styled(RLink)`
-  color: #00f;
+  color: #1ba2a1;
   font-size: 14px;
   font-weight: 500;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export const Button = styled(MButton)`
@@ -108,4 +131,9 @@ export const Button = styled(MButton)`
       background-color: ${shade(0.2, '#4bb543')};
     }
   }
+`;
+
+export const Logo = styled.img`
+  height: 56px;
+  padding-top: 30px;
 `;
