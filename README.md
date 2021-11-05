@@ -6,6 +6,9 @@ O back-end do projeto consiste em uma aplicação Node que cadastra usuários e 
 
 O front-end fornece interface gráfica com o usuário para cadastro de conta e login, acessando o back-end para obter um token de autenticação e poder prosseguir para as rotas que necessitam de autorização. Foi também dada atenção à responsividade das páginas, variando a disposição dos componentes de acordo com o tamanho da tela do dispositivo. Um usuário é capaz de gerenciar os clientes de uma usina, realizando CRUD com validação dos valores. Além disso, pode acessar os dados estatísticos da usina em um gráfico.
 
+## Link do vídeo
+https://youtu.be/SCIojKYUr6M
+
 ## Instruções de instalação e execução
 
 ### Back-end
