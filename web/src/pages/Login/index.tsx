@@ -20,7 +20,7 @@ import {
   Background,
 } from './styles';
 
-import logo from '../../assets/images/logo-Sharenergy-01.png';
+import logo from '../../assets/images/logo-Makenergy-01.png';
 import { useAuth } from '../../hooks/auth';
 import getValidationErrors from '../../utils/getValidationErrors';
 

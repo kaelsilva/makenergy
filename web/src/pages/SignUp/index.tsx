@@ -18,7 +18,7 @@ import {
   Background,
 } from './styles';
 
-import logo from '../../assets/images/logo-Sharenergy-01.png';
+import logo from '../../assets/images/logo-Makenergy-01.png';
 import api from '../../services/api';
 import getValidationErrors from '../../utils/getValidationErrors';
 
