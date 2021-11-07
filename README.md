@@ -29,14 +29,10 @@ Primeiramente, certifique-se de que o [Yarn](https://classic.yarnpkg.com/lang/en
 4. Abra o navegador e acesse http://localhost:3000
 
 ## Screenshots
-<img src='./images/login-desktop-auth-error.png' alt="" width="40%" /> 
-<img src='./images/client-edit-desktop.png' alt="" width="40%" /> 
-<img src='./images/chart-potency-desktop.png' alt="" width="40%" /> 
-<img src='./images/signup-desktop-email-error.png' alt="" width="40%" /> 
-<img src='./images/chart-temperature-desktop.png' alt="" width="40%" />  
+### Desktop
+<img src='./images/login-desktop-auth-error.png' alt="Erro de login" width="40%" /> <img src='./images/client-edit-desktop.png' alt="Edição de cliente" width="40%" /> 
+<img src='./images/chart-potency-desktop.png' alt="Gráfico de potência da usina" width="40%" /> <img src='./images/signup-desktop-email-error.png' alt="Tela de cadastro de usuário" width="40%" /> 
+<img src='./images/chart-temperature-desktop.png' alt="Gráfico de temperatura da usina" width="40%" />  
 
-<img src='./images/signup-mobile.png' alt="" width="18%" />
-<img src='./images/toolbar-open-mobile.png' alt="" width="18%" />
-<img src='./images/login-mobile.png' alt="" width="18%" />
-<img src='./images/chart-mobile.png' alt="" width="18%"/>
-<img src='./images/client-list-mobile.png' alt=""width="18%" />
+### Mobile
+<img src='./images/signup-mobile.png' alt="Tela de cadastro de usuário mobile" width="18%" /> <img src='./images/toolbar-open-mobile.png' alt="" width="18%" /> <img src='./images/login-mobile.png' alt="Tela de login de usuário mobile" width="18%" /> <img src='./images/chart-mobile.png' alt="Gráfico de potência da usina mobile" width="18%"/> <img src='./images/client-list-mobile.png' alt="Lista de clientes mobile" width="18%" />
