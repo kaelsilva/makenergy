@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FiHome, FiActivity, FiLogOut } from 'react-icons/fi';
 import * as S from './styles';
-import logo from '../../assets/images/logo-Sharenergy-01.png';
+import logo from '../../assets/images/logo-Makenergy-01.png';
 import { useAuth } from '../../hooks/auth';
 
 const Toolbar: React.FC = () => {

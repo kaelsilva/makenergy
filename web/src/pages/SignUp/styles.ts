@@ -3,7 +3,7 @@ import { Typography, Input as MInput, Button as MButton } from '@mui/material';
 import { Link as RLink } from 'react-router-dom';
 import { shade } from 'polished';
 import { Form as UForm } from '@unform/web';
-import bgImg from '../../assets/images/usina-solo2.jpg';
+import bgImg from '../../assets/images/usina-solo1.jpg';
 
 export const Background = styled.div`
   display: flex;
@@ -16,7 +16,7 @@ export const Background = styled.div`
 
   background: url(${bgImg});
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: cover;
 `;
 
 export const Container = styled.div`
